@@ -19,7 +19,7 @@ missing module named _frozen_importlib_external - imported by importlib (top-lev
 excluded module named _frozen_importlib - imported by importlib (top-level), importlib.abc (top-level), zipimport (top-level)
 missing module named pwd - imported by posixpath (top-level), shutil (top-level), tarfile (top-level), pathlib._local (top-level), subprocess (top-level), netrc (top-level), getpass (top-level)
 missing module named grp - imported by shutil (top-level), tarfile (top-level), pathlib._local (top-level), subprocess (top-level)
-missing module named posix - imported by os (top-level), posixpath (top-level), shutil (top-level), importlib._bootstrap_external (top-level)
+missing module named posix - imported by posixpath (top-level), shutil (top-level), importlib._bootstrap_external (top-level), os (top-level)
 missing module named resource - imported by posix (top-level)
 missing module named 'collections.abc' - imported by traceback (top-level), inspect (top-level), logging (top-level), typing (top-level), selectors (top-level), tracemalloc (top-level), xml.etree.ElementTree (top-level), http.client (top-level)
 missing module named _suggestions - imported by traceback (top-level)
