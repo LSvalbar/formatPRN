@@ -2,7 +2,7 @@ import os
 import re
 from openpyxl import Workbook
 from openpyxl.styles import NamedStyle
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLineEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QFileDialog, QLineEdit, QMessageBox
 
 
 class FileGroupProcessor(QWidget):
@@ -43,13 +43,13 @@ class FileGroupProcessor(QWidget):
         folder_path = self.file_path_input.text().strip()
 
         if not os.path.exists(folder_path):
-            print("文件夹路径无效")
+            QMessageBox.warning(self,"警告","文件夹路径无效")
             return
 
         # 只处理 .prn 文件
         prn_files = [f for f in os.listdir(folder_path) if f.endswith('.prn')]
         if not prn_files:
-            print("文件夹中没有找到 PRN 文件")
+            QMessageBox.warning(self, "警告", "文件夹中没有找到 PRN 文件")
             return
 
         # 按文件名分组
@@ -58,11 +58,13 @@ class FileGroupProcessor(QWidget):
         for group_name, files in file_groups.items():
             self.create_excel_for_group(group_name, files, folder_path)
 
+        QMessageBox.information(self,"信息","所有文件处理完毕！")
+
     def group_files_by_prefix(self, file_list):
         file_groups = {}
         for file_name in file_list:
             # 通过正则提取分组前缀
-            match = re.match(r"(.+? \d{3})", file_name)
+            match = re.match(r"(.+?(\d{3}))", file_name)
             if match:
                 group_name = match.group(1)
                 file_groups.setdefault(group_name, []).append(file_name)
@@ -120,14 +122,17 @@ class FileGroupProcessor(QWidget):
     def write_file_to_sheet(self, file_name, sheet, column_idx, folder_path, cell_style):
         file_path = os.path.join(folder_path, file_name)
         with open(file_path, 'rb') as f:
-            for row_idx, line in enumerate(f, start=2):
+            for row_idx, line in enumerate(f, start=0):
                 line = line.decode('utf-8', errors='ignore').strip()
                 if line:
+                    if row_idx == 0 or row_idx == 1:
+                        continue
                     parts = line.split(',')
+
                     if len(parts) == 2:
                         # 写入A列
                         if not sheet.cell(row=row_idx, column=1).value:
-                            sheet.cell(row=row_idx, column=1, value=parts[0].strip())
+                            sheet.cell(row=row_idx, column=1, value=parts[0].strip().split('.')[0])
                         # 写入对应列
                         sheet.cell(row=row_idx, column=column_idx, value=float(parts[1].strip())).style = cell_style
 
