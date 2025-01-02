@@ -64,9 +64,9 @@ class FileGroupProcessor(QWidget):
         file_groups = {}
         for file_name in file_list:
             # 通过正则提取分组前缀
-            match = re.match(r"(.+?(\d{3}))", file_name)
+            match = re.match(r"(.+?(\d{2,3}\s))", file_name)
             if match:
-                group_name = match.group(1)
+                group_name = match.group(1).strip()
                 file_groups.setdefault(group_name, []).append(file_name)
         return file_groups
 
